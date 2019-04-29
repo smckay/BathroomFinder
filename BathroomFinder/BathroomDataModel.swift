@@ -1,10 +1,3 @@
-//
-//  BathroomDataModel.swift
-//  Clima
-//
-//  Created by McKay, Samuel on 3/27/19.
-//  Copyright © 2019 London App Brewery. All rights reserved.
-//
 
 import UIKit
 

@@ -1,17 +1,9 @@
-//
-//  ViewController.swift
-//  WeatherApp
-//
-//  Created by Angela Yu on 23/08/2015.
-//  Copyright (c) 2015 London App Brewery. All rights reserved.
-//
-
 import UIKit
 import CoreLocation
 import Alamofire
 import SwiftyJSON
 
-class WeatherViewController: UIViewController, CLLocationManagerDelegate, ChangeCityDelegate {
+class BathroomViewController: UIViewController, CLLocationManagerDelegate{
     
     //Constants
     let BATHROOMS_URL = "https://data.cityofnewyork.us/resource/e4ej-j6hn.json"
@@ -32,9 +24,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
     var closestBathroom: BathroomDataModel?
 
     //Pre-linked IBOutlets
-    @IBOutlet weak var weatherIcon: UIImageView!
-    @IBOutlet weak var cityLabel: UILabel!
-    @IBOutlet weak var temperatureLabel: UILabel!
+    @IBOutlet weak var bathroomLabel: UILabel!
 
     
     override func viewDidLoad() {
@@ -78,7 +68,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
             }
             else{
                 print("Error \(response.result.error!)")
-                self.cityLabel.text = "Connection Issues"
+                self.bathroomLabel.text = "Connection Issues"
             }
         }
         
@@ -115,7 +105,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
             }
             else{
                 print("Error \(response.result.error!)")
-                self.cityLabel.text = "Connection Issues"
+                self.bathroomLabel.text = "Connection Issues"
             }
         }
     }
@@ -128,7 +118,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
                 self.updateDistanceData(json: JSON(response.result.value!), index: index)
                 if(index == self.bathroomsDataModel.bathrooms.count - 1){
                     self.closestBathroom = self.bathroomsDataModel.closestBathroom()
-                    self.updateUIWithWeatherData()
+                    self.updateUIWithBathroomData()
                 }
             }
             else{
@@ -168,8 +158,8 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
     
     //Write the updateUIWithWeatherData method here:
     
-    func updateUIWithWeatherData() {
-        cityLabel.text = closestBathroom!.name
+    func updateUIWithBathroomData() {
+        bathroomLabel.text = closestBathroom!.name
         //temperatureLabel.text = "\(weatherDataModel.temperature)"
         //weatherIcon.image = UIImage(named: weatherDataModel.weatherIconName)
         
@@ -208,33 +198,9 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
     //Write the didFailWithError method here:
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error)
-        cityLabel.text = "Location Unavailable"
+        bathroomLabel.text = "Location Unavailable"
     }
     
-    
-
-    
-    //MARK: - Change City Delegate methods
-    /***************************************************************/
-    
-    
-    //Write the userEnteredANewCityName Delegate method here:
-    func userEnteredANewCityName(city: String) {
-        print(city)
-        let params : [String: String] = ["q" : city, "appid" : BATHROOM_APP_ID]
-        getBathroomData(url: BATHROOMS_URL, parameters: params)
-    }
-    
-
-    
-    //Write the PrepareForSegue Method here
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "changeCityName" {
-            let destinationVC = segue.destination as! ChangeCityViewController
-            destinationVC.delegate = self
-        }
-    }
     
     
     
